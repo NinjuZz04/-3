@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 3 Months Anniversary 🤍</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333333;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .page-content {
+            opacity: 0;
+            transform: translateY(30px) scale(0.96);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .page-content.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .letter-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, #ffffff 0%, #f7f7f7 45%, #f2f2f2 100%);
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .letter-screen.opened {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .letter-button {
+            position: relative;
+            width: 220px;
+            height: 180px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fffefb 0%, #f8f5f1 100%);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: letterFloat 2.4s ease-in-out infinite;
+        }
+
+        .letter-button:hover {
+            transform: translateY(-4px) rotate(-1deg);
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.14), 0 10px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .letter-button::before,
+        .letter-button::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .letter-button::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0));
+        }
+
+        .letter-button::after {
+            inset: 10px 12px 12px 12px;
+            border: 1px solid rgba(145, 128, 110, 0.18);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(245,239,232,0.5));
+        }
+
+        .letter-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 100%;
+            color: #4d443d;
+            font-family: var(--font-hand);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 1.1rem;
+        }
+
+        .letter-content strong {
+            font-size: 2.3rem;
+            letter-spacing: 0.08em;
+        }
+
+        .letter-screen.opened .letter-button {
+            animation: popPaper 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes letterFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes popPaper {
+            0% {
+                transform: scale(0.7) rotate(-8deg);
+                opacity: 0.4;
+            }
+            45% {
+                transform: scale(1.12) rotate(2deg);
+                opacity: 1;
+            }
+            75% {
+                transform: scale(0.97) rotate(-2deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .elegant-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 
+                        0 0 20px rgba(0,0,0,0.02);
+        }
+
+        .polaroid {
+            background: #ffffff;
+            padding: 12px 12px 45px 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            transform: rotate(-2deg);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .polaroid:hover {
+            transform: rotate(1deg) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -50px;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatUp linear infinite;
+            color: #d1d5db;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.02));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .spin-slow {
+            animation: spin 8s linear infinite;
+            animation-play-state: paused;
+        }
+        .playing .spin-slow {
+            animation-play-state: running;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased relative">
+
+    <div id="letter-screen" class="letter-screen">
+        <button id="open-letter" class="letter-button" type="button" aria-label="Open letter">
+            <div class="letter-content">
+                <strong>For Kaimook</strong>
+                <span>Click me</span>
+            </div>
+        </button>
+    </div>
+
+    <div id="main-page" class="page-content hidden">
+        <div id="particles-container" class="absolute inset-0 z-0 overflow-hidden pointer-events-none"></div>
+
+        <main class="relative z-10 w-full max-w-md mx-4 sm:mx-auto">
+            <div class="elegant-card rounded-[2rem] p-8 flex flex-col items-center text-center">
+                <h1 class="text-3xl sm:text-4xl font-semibold mb-2 text-gray-800 tracking-tight" style="font-family: var(--font-heading);">
+                    Happy 3 Months<br>Anniversary
+                </h1>
+                <p class="text-sm text-gray-400 mb-8 font-light tracking-widest uppercase">To my favorite person</p>
+
+                <div class="polaroid w-56 sm:w-64 mb-10 mx-auto cursor-pointer relative group">
+                    <div class="w-full h-56 sm:h-64 bg-gray-100 overflow-hidden">
+                        <video src="20260805_214102_533.mp4" autoplay loop muted playsinline class="w-full h-full object-cover object-center opacity-90 group-hover:opacity-100 transition-opacity duration-500"></video>
+                    </div>
+                    <p class="absolute bottom-3 left-0 right-0 text-center text-gray-600 text-xl" style="font-family: var(--font-hand);">
+                        3 months with you 🤍
+                    </p>
+                </div>
+
+                <div class="mt-4 w-full">
+                    <iframe
+                        style="border-radius:12px"
+                        src="https://open.spotify.com/embed/track/2bxMKJSYTKBggWIsXzGvgN?utm_source=generator&theme=0"
+                        width="100%"
+                        height="80"
+                        frameBorder="0"
+                        allowfullscreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy">
+                    </iframe>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const particlesContainer = document.getElementById('particles-container');
+        const particleIcons = ['🤍', '✨', '☁️', '🕊️', '✧'];
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.innerText = particleIcons[Math.floor(Math.random() * particleIcons.length)];
+            
+            const leftPos = Math.random() * 100;
+            particle.style.left = `${leftPos}vw`;
+            
+            const size = Math.random() * 0.8 + 0.6;
+            particle.style.fontSize = `${size}rem`;
+            
+            const duration = Math.random() * 12 + 10;
+            particle.style.animationDuration = `${duration}s`;
+            
+            const delay = Math.random() * 5;
+            particle.style.animationDelay = `${delay}s`;
+
+            particlesContainer.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, (duration + delay) * 1000);
+        }
+
+        setInterval(createParticle, 800);
+
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createParticle, i * 200);
+        }
+
+        const letterScreen = document.getElementById('letter-screen');
+        const openLetterBtn = document.getElementById('open-letter');
+        const mainPage = document.getElementById('main-page');
+
+        openLetterBtn.addEventListener('click', () => {
+            letterScreen.classList.add('opened');
+            mainPage.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                mainPage.classList.add('show');
+            });
+        });
+    </script>
+</body>
+</html>
