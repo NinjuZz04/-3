@@ -138,6 +138,370 @@
         }
 
         .video-screen video {
+            display: block;
+            width: 100vw;
+            height: 100dvh;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        /* เอฟเฟกต์หัวใจระเบิด (Burst) ตอนวิดีโอจบ */
+        .burst-heart {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0);
+            animation: burstAnim 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            pointer-events: none;
+        }
+
+        @keyframes burstAnim {
+            0% { 
+                transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translate(var(--tx), var(--ty)) scale(1.4) rotate(var(--rot)); 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes letterFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes popPaper {
+            0% { transform: scale(0.7) rotate(-8deg); opacity: 0.4; }
+            45% { transform: scale(1.12) rotate(2deg); opacity: 1; }
+            75% { transform: scale(0.97) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* สไตล์หน้าการ์ด */
+        .elegant-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 0 20px rgba(0,0,0,0.02);
+            width: 90%;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+
+        .polaroid {
+            background: #ffffff;
+            padding: 12px 12px 45px 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            transform: rotate(-2deg);
+            width: 70vw;
+            max-width: 250px;
+            margin: 0 auto 30px auto;
+        }
+
+        .polaroid-img-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #f3f4f6;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -50px;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatUp linear infinite;
+            color: #d1d5db;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-100vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="antialiased relative">
+
+    <!-- 1. หน้าซองจดหมาย -->
+    <div id="letter-screen" class="letter-screen">
+        <button id="open-letter" class="letter-button" type="button" aria-label="Open letter">
+            <div class="letter-content">
+                <strong>For Kaimook</strong>
+                <span>Click me</span>
+            </div>
+        </button>
+    </div>
+
+    <!-- 2. หน้าจอนกพิราบคาบจดหมาย -->
+    <div id="video-screen" class="video-screen hidden">
+        <video id="intro-video" src="dove.mp4" playsinline muted></video>
+    </div>
+
+    <!-- 3. หน้าการ์ดหลัก -->
+    <div id="main-page" class="page-content hidden">
+        <div id="particles-container" class="absolute inset-0 z-0 overflow-hidden pointer-events-none"></div>
+
+        <main class="relative z-10 w-full flex justify-center">
+            <div class="elegant-card rounded-[2rem] p-6 sm:p-8 flex flex-col items-center text-center">
+                <h1 class="text-2xl sm:text-3xl font-semibold mb-2 text-gray-800 tracking-tight" style="font-family: var(--font-heading);">
+                    Happy 3 Months<br>Anniversary
+                </h1>
+                <p class="text-xs sm:text-sm text-gray-400 mb-6 font-light tracking-widest uppercase">To my favorite person</p>
+
+                <div class="polaroid cursor-pointer relative group">
+                    <div class="polaroid-img-container">
+                        <video src="20260805_214102_533.mp4" autoplay loop muted playsinline class="w-full h-full object-cover object-center opacity-90 group-hover:opacity-100 transition-opacity duration-500"></video>
+                    </div>
+                    <p class="absolute bottom-3 left-0 right-0 text-center text-gray-600 text-lg sm:text-xl" style="font-family: var(--font-hand);">
+                        3 months with you 🤍
+                    </p>
+                </div>
+
+                <div class="w-full">
+                    <iframe
+                        style="border-radius:12px"
+                        src="https://open.spotify.com/embed/track/2bxMKJSYTKBggWIsXzGvgN?utm_source=generator&theme=0"
+                        width="100%"
+                        height="80"
+                        frameBorder="0"
+                        allowfullscreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ระบบอนุภาคพื้นหลัง
+        const particlesContainer = document.getElementById('particles-container');
+        const particleIcons = ['🤍', '✨', '☁️', '🕊️', '✧'];
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.innerText = particleIcons[Math.floor(Math.random() * particleIcons.length)];
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.fontSize = `${Math.random() * 0.8 + 0.6}rem`;
+            const duration = Math.random() * 12 + 10;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(particle);
+            setTimeout(() => particle.remove(), (duration + 5) * 1000);
+        }
+
+        setInterval(createParticle, 800);
+        for (let i = 0; i < 8; i++) { setTimeout(createParticle, i * 200); }
+
+        // ควบคุมการทำงาน
+        const letterScreen = document.getElementById('letter-screen');
+        const openLetterBtn = document.getElementById('open-letter');
+        const videoScreen = document.getElementById('video-screen');
+        const introVideo = document.getElementById('intro-video');
+        const mainPage = document.getElementById('main-page');
+
+        openLetterBtn.addEventListener('click', () => {
+            letterScreen.classList.add('opened');
+            setTimeout(() => {
+                videoScreen.classList.remove('hidden');
+                introVideo.play().catch(e => triggerTransitionEffect());
+            }, 300);
+        });
+
+        // สั่งให้เอฟเฟกต์ทำงานพร้อมกับจังหวะที่วิดีโอจบพอดี (ended)
+        introVideo.addEventListener('ended', () => {
+            triggerTransitionEffect();
+        });
+
+        introVideo.addEventListener('error', () => {
+            triggerTransitionEffect();
+        });
+
+        function triggerTransitionEffect() {
+            // สร้างแฟลชสีขาวสว่างวาบ
+            const flash = document.createElement('div');
+            flash.className = 'fixed inset-0 bg-white z-[60] transition-opacity duration-700 pointer-events-none';
+            document.body.appendChild(flash);
+
+            // สร้างหัวใจพุ่งกระจายออกจากจุดกึ่งกลางหน้าจอ
+            const burstIcons = ['🤍', '✨', '🤍', '🕊️'];
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = burstIcons[Math.floor(Math.random() * burstIcons.length)];
+                heart.className = 'burst-heart z-[65]';
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 100 + Math.random() * 180;
+                heart.style.setProperty('--tx', `calc(-50% + ${Math.cos(angle) * distance}px)`);
+                heart.style.setProperty('--ty', `calc(-50% + ${Math.sin(angle) * distance}px)`);
+                heart.style.setProperty('--rot', `${Math.random() * 360}deg`);
+                heart.style.left = '50%';
+                heart.style.top = '50%';
+                
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 1000);
+            }
+
+            // สลับซ่อนหน้าวิดีโอ และแสดงหน้าการ์ดหลักทันที
+            videoScreen.classList.add('hidden');
+            mainPage.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                mainPage.classList.add('show');
+            });
+
+            // เฟดแสงแฟลชขาวออกอย่างนุ่มนวล
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 700);
+            }, 50);
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy 3 Months Anniversary 🤍</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+            height: 100vh;
+            height: 100dvh; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333333;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* หน้าหลัก (เนื้อหา) */
+        .page-content {
+            opacity: 0;
+            transform: translateY(30px) scale(0.96);
+            transition: opacity 1s ease, transform 1s ease;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .page-content.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* หน้าซองจดหมาย */
+        .letter-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, #ffffff 0%, #f7f7f7 45%, #f2f2f2 100%);
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .letter-screen.opened {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .letter-button {
+            position: relative;
+            width: 220px;
+            height: 180px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fffefb 0%, #f8f5f1 100%);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: letterFloat 2.4s ease-in-out infinite;
+        }
+
+        .letter-button::before,
+        .letter-button::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .letter-button::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0));
+        }
+
+        .letter-button::after {
+            inset: 10px 12px 12px 12px;
+            border: 1px solid rgba(145, 128, 110, 0.18);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(245,239,232,0.5));
+        }
+
+        .letter-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 100%;
+            color: #4d443d;
+            font-family: var(--font-hand);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 1.1rem;
+        }
+
+        .letter-content strong {
+            font-size: 2.3rem;
+            letter-spacing: 0.08em;
+        }
+
+        .letter-screen.opened .letter-button {
+            animation: popPaper 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* หน้าจอสำหรับเล่นวิดีโอนกพิราบ (ปรับครอบภาพให้พอดีจอ ไม่ให้ยืดเบี้ยว) */
+        .video-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 25;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .video-screen video {
             width: 100%;
             height: 100%;
             object-fit: cover; /* ครอบตัดขอบวิดีโอให้เต็มจอพอดีมือถือ */
