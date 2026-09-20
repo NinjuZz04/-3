@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ปรับแต่งให้พอดีกับมือถือ และป้องกันการซูมเวลาแตะหน้าจอ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 3 Months Anniversary 🤍</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,10 +23,13 @@
             font-family: var(--font-body);
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
             height: 100vh;
+            /* แก้ปัญหาจอบนมือถือ (Mobile URL bar) */
+            height: 100dvh; 
             display: flex;
             align-items: center;
             justify-content: center;
             color: #333333;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .hidden {
@@ -38,7 +42,7 @@
         .page-content {
             opacity: 0;
             transform: translateY(30px) scale(0.96);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transition: opacity 1s ease, transform 1s ease;
             position: relative;
             z-index: 10;
             width: 100%;
@@ -138,18 +142,12 @@
         .video-screen {
             position: fixed;
             inset: 0;
-            z-index: 25; /* อยู่ใต้จดหมาย แต่อยู่บนหน้าหลัก */
+            z-index: 25;
             background: #ffffff;
             opacity: 1;
-            transition: opacity 1s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .video-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
         }
 
         .video-screen video {
@@ -159,7 +157,30 @@
         }
 
         /* ---------------------------------
-           Animations
+           เอฟเฟกต์หัวใจระเบิด (Burst)
+        --------------------------------- */
+        .burst-heart {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0);
+            animation: burstAnim 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            pointer-events: none;
+        }
+
+        @keyframes burstAnim {
+            0% { 
+                transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); 
+                opacity: 0; 
+            }
+        }
+
+        /* ---------------------------------
+           Animations พื้นฐาน
         --------------------------------- */
         @keyframes letterFloat {
             0%, 100% { transform: translateY(0px); }
@@ -167,32 +188,24 @@
         }
 
         @keyframes popPaper {
-            0% {
-                transform: scale(0.7) rotate(-8deg);
-                opacity: 0.4;
-            }
-            45% {
-                transform: scale(1.12) rotate(2deg);
-                opacity: 1;
-            }
-            75% {
-                transform: scale(0.97) rotate(-2deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
+            0% { transform: scale(0.7) rotate(-8deg); opacity: 0.4; }
+            45% { transform: scale(1.12) rotate(2deg); opacity: 1; }
+            75% { transform: scale(0.97) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         /* ---------------------------------
-           สไตล์หน้าเนื้อหา
+           สไตล์หน้าเนื้อหาการ์ด
         --------------------------------- */
         .elegant-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(229, 231, 235, 0.5);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 
-                        0 0 20px rgba(0,0,0,0.02);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 0 20px rgba(0,0,0,0.02);
+            /* ปรับให้พอดีจอมือถือมากขึ้น */
+            width: 90%;
+            max-width: 380px;
+            margin: 0 auto;
         }
 
         .polaroid {
@@ -201,10 +214,22 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.06);
             transform: rotate(-2deg);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            /* ยืดหยุ่นตามจอมือถือ */
+            width: 70vw;
+            max-width: 250px;
+            margin: 0 auto 30px auto;
         }
+        
         .polaroid:hover {
             transform: rotate(1deg) scale(1.03);
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .polaroid-img-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #f3f4f6;
+            overflow: hidden;
         }
 
         .particle {
@@ -218,20 +243,10 @@
         }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(0.8);
-                opacity: 0;
-            }
-            20% {
-                opacity: 0.6;
-            }
-            80% {
-                opacity: 0.4;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg) scale(1.2);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-100vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
     </style>
 </head>
@@ -249,31 +264,30 @@
 
     <!-- 2. หน้าจอสำหรับเล่นวิดีโอนกพิราบ -->
     <div id="video-screen" class="video-screen hidden">
-        <!-- เปลี่ยนชื่อไฟล์ dove.mp4 เป็นชื่อไฟล์วิดีโอของคุณ -->
         <video id="intro-video" src="dove.mp4" playsinline muted></video>
     </div>
 
-    <!-- 3. หน้าจอหลัก (แสดงหลังวิดีโอจบ) -->
+    <!-- 3. หน้าจอหลัก (แสดงหลังเอฟเฟกต์จบ) -->
     <div id="main-page" class="page-content hidden">
         <div id="particles-container" class="absolute inset-0 z-0 overflow-hidden pointer-events-none"></div>
 
-        <main class="relative z-10 w-full max-w-md mx-4 sm:mx-auto">
-            <div class="elegant-card rounded-[2rem] p-8 flex flex-col items-center text-center">
-                <h1 class="text-3xl sm:text-4xl font-semibold mb-2 text-gray-800 tracking-tight" style="font-family: var(--font-heading);">
+        <main class="relative z-10 w-full flex justify-center">
+            <div class="elegant-card rounded-[2rem] p-6 sm:p-8 flex flex-col items-center text-center">
+                <h1 class="text-2xl sm:text-3xl font-semibold mb-2 text-gray-800 tracking-tight" style="font-family: var(--font-heading);">
                     Happy 3 Months<br>Anniversary
                 </h1>
-                <p class="text-sm text-gray-400 mb-8 font-light tracking-widest uppercase">To my favorite person</p>
+                <p class="text-xs sm:text-sm text-gray-400 mb-6 font-light tracking-widest uppercase">To my favorite person</p>
 
-                <div class="polaroid w-56 sm:w-64 mb-10 mx-auto cursor-pointer relative group">
-                    <div class="w-full h-56 sm:h-64 bg-gray-100 overflow-hidden">
+                <div class="polaroid cursor-pointer relative group">
+                    <div class="polaroid-img-container">
                         <video src="20260805_214102_533.mp4" autoplay loop muted playsinline class="w-full h-full object-cover object-center opacity-90 group-hover:opacity-100 transition-opacity duration-500"></video>
                     </div>
-                    <p class="absolute bottom-3 left-0 right-0 text-center text-gray-600 text-xl" style="font-family: var(--font-hand);">
+                    <p class="absolute bottom-3 left-0 right-0 text-center text-gray-600 text-lg sm:text-xl" style="font-family: var(--font-hand);">
                         3 months with you 🤍
                     </p>
                 </div>
 
-                <div class="mt-4 w-full">
+                <div class="w-full">
                     <iframe
                         style="border-radius:12px"
                         src="https://open.spotify.com/embed/track/2bxMKJSYTKBggWIsXzGvgN?utm_source=generator&theme=0"
@@ -291,7 +305,7 @@
     </div>
 
     <script>
-        // ระบบตกแต่ง Particles
+        // ระบบตกแต่ง Particles พื้นหลัง
         const particlesContainer = document.getElementById('particles-container');
         const particleIcons = ['🤍', '✨', '☁️', '🕊️', '✧'];
 
@@ -313,10 +327,7 @@
             particle.style.animationDelay = `${delay}s`;
 
             particlesContainer.appendChild(particle);
-
-            setTimeout(() => {
-                particle.remove();
-            }, (duration + delay) * 1000);
+            setTimeout(() => particle.remove(), (duration + delay) * 1000);
         }
 
         setInterval(createParticle, 800);
@@ -333,33 +344,70 @@
 
         // เมื่อกดปุ่มซองจดหมาย
         openLetterBtn.addEventListener('click', () => {
-            // ซ่อนหน้าซองจดหมาย
             letterScreen.classList.add('opened');
-            
-            // แสดงหน้าจอเล่นวิดีโอ (รอให้ซองค่อยๆ จางก่อนนิดนึง)
             setTimeout(() => {
                 videoScreen.classList.remove('hidden');
-                introVideo.play();
+                introVideo.play().catch(e => {
+                    // ป้องกันเผื่อเบราว์เซอร์บล็อกวิดีโอ
+                    triggerTransitionEffect();
+                });
             }, 300);
         });
 
         // เมื่อวิดีโอนกพิราบเล่นจบ
         introVideo.addEventListener('ended', () => {
-            // เฟดวิดีโอออก
-            videoScreen.classList.add('fade-out');
-            
-            // เตรียมแสดงหน้าจอหลัก
+            triggerTransitionEffect();
+        });
+
+        // สำรองเผื่อโหลดวิดีโอไม่ขึ้น จะได้ไม่ค้างหน้าขาว
+        introVideo.addEventListener('error', () => {
+            triggerTransitionEffect();
+        });
+
+        // ฟังก์ชันสร้างเอฟเฟกต์ตอนเปลี่ยนหน้า
+        function triggerTransitionEffect() {
+            // 1. สร้างแฟลชสีขาว
+            const flash = document.createElement('div');
+            flash.className = 'fixed inset-0 bg-white z-[60] transition-opacity duration-[1000ms] pointer-events-none';
+            document.body.appendChild(flash);
+
+            // 2. สร้างหัวใจกระจาย (Heart Burst)
+            const burstIcons = ['🤍', '✨', '🤍'];
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = burstIcons[Math.floor(Math.random() * burstIcons.length)];
+                heart.className = 'burst-heart z-[65]';
+                
+                // สุ่มทิศทางและระยะทาง
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 80 + Math.random() * 150; // ระยะการพุ่ง
+                const tx = (Math.cos(angle) * distance) + 'px';
+                const ty = (Math.sin(angle) * distance) + 'px';
+                const rot = (Math.random() * 360) + 'deg';
+                
+                heart.style.setProperty('--tx', `calc(-50% + ${tx})`);
+                heart.style.setProperty('--ty', `calc(-50% + ${ty})`);
+                heart.style.setProperty('--rot', rot);
+                heart.style.left = '50%';
+                heart.style.top = '50%';
+                
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 1200);
+            }
+
+            // 3. ปิดหน้าจอวิดีโอและแสดงหน้าหลัก
+            videoScreen.classList.add('hidden');
             mainPage.classList.remove('hidden');
-            
+
             setTimeout(() => {
-                // ซ่อนโครงสร้างวิดีโอทิ้งไป
-                videoScreen.classList.add('hidden');
-                // เฟดหน้าจอหลักเข้ามา
                 requestAnimationFrame(() => {
                     mainPage.classList.add('show');
                 });
-            }, 800); // รอให้วิดีโอเฟดออกเสร็จก่อน (เวลาตรงกับ CSS transition)
-        });
+                // เฟดแฟลชสีขาวออก
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 1000);
+            }, 50);
+        }
     </script>
 </body>
 </html>
