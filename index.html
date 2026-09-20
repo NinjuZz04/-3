@@ -22,7 +22,7 @@
             font-family: var(--font-body);
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
             height: 100vh;
-            height: 100dvh;
+            height: 100dvh; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -34,6 +34,7 @@
             display: none !important;
         }
 
+        /* หน้าหลัก (เนื้อหา) */
         .page-content {
             opacity: 0;
             transform: translateY(30px) scale(0.96);
@@ -48,6 +49,7 @@
             transform: translateY(0) scale(1);
         }
 
+        /* หน้าซองจดหมาย */
         .letter-screen {
             position: fixed;
             inset: 0;
@@ -77,11 +79,6 @@
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: letterFloat 2.4s ease-in-out infinite;
-        }
-
-        .letter-button:hover {
-            transform: translateY(-4px) rotate(-1deg);
-            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.14), 0 10px 18px rgba(0, 0, 0, 0.08);
         }
 
         .letter-button::before,
@@ -128,14 +125,12 @@
             animation: popPaper 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* ครอบคลิปวิดีโอนกพิราบให้เต็มจอแบบไม่ออกสัดส่วน (Crop Fit) */
+        /* หน้าจอสำหรับเล่นวิดีโอนกพิราบ (ปรับครอบภาพให้พอดีจอ ไม่ให้ยืดเบี้ยว) */
         .video-screen {
             position: fixed;
             inset: 0;
             z-index: 25;
             background: #ffffff;
-            opacity: 1;
-            transition: opacity 0.8s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -145,26 +140,28 @@
         .video-screen video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ครอบตัดส่วนเกินและขยายให้เต็มจออัตโนมัติ */
-            object-position: center;
+            object-fit: cover; /* ครอบตัดขอบวิดีโอให้เต็มจอพอดีมือถือ */
         }
 
-        .video-screen.fade-out {
-            opacity: 0;
-        }
-
+        /* เอฟเฟกต์หัวใจระเบิด (Burst) ตอนวิดีโอจบ */
         .burst-heart {
             position: absolute;
             font-size: 2rem;
             opacity: 1;
             transform: translate(-50%, -50%) scale(0);
-            animation: burstAnim 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            animation: burstAnim 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
             pointer-events: none;
         }
 
         @keyframes burstAnim {
-            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); opacity: 0; }
+            0% { 
+                transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translate(var(--tx), var(--ty)) scale(1.4) rotate(var(--rot)); 
+                opacity: 0; 
+            }
         }
 
         @keyframes letterFloat {
@@ -179,6 +176,7 @@
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
+        /* สไตล์หน้าการ์ด */
         .elegant-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -194,12 +192,11 @@
             padding: 12px 12px 45px 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.06);
             transform: rotate(-2deg);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             width: 70vw;
             max-width: 250px;
             margin: 0 auto 30px auto;
         }
-        
+
         .polaroid-img-container {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -214,7 +211,6 @@
             opacity: 0;
             animation: floatUp linear infinite;
             color: #d1d5db;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.02));
         }
 
         @keyframes floatUp {
@@ -227,6 +223,7 @@
 </head>
 <body class="antialiased relative">
 
+    <!-- 1. หน้าซองจดหมาย -->
     <div id="letter-screen" class="letter-screen">
         <button id="open-letter" class="letter-button" type="button" aria-label="Open letter">
             <div class="letter-content">
@@ -236,10 +233,12 @@
         </button>
     </div>
 
+    <!-- 2. หน้าจอนกพิราบคาบจดหมาย -->
     <div id="video-screen" class="video-screen hidden">
         <video id="intro-video" src="dove.mp4" playsinline muted></video>
     </div>
 
+    <!-- 3. หน้าการ์ดหลัก -->
     <div id="main-page" class="page-content hidden">
         <div id="particles-container" class="absolute inset-0 z-0 overflow-hidden pointer-events-none"></div>
 
@@ -271,12 +270,12 @@
                         loading="lazy">
                     </iframe>
                 </div>
-
             </div>
         </main>
     </div>
 
     <script>
+        // ระบบอนุภาคพื้นหลัง
         const particlesContainer = document.getElementById('particles-container');
         const particleIcons = ['🤍', '✨', '☁️', '🕊️', '✧'];
 
@@ -284,28 +283,19 @@
             const particle = document.createElement('div');
             particle.classList.add('particle');
             particle.innerText = particleIcons[Math.floor(Math.random() * particleIcons.length)];
-            
-            const leftPos = Math.random() * 100;
-            particle.style.left = `${leftPos}vw`;
-            
-            const size = Math.random() * 0.8 + 0.6;
-            particle.style.fontSize = `${size}rem`;
-            
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.fontSize = `${Math.random() * 0.8 + 0.6}rem`;
             const duration = Math.random() * 12 + 10;
             particle.style.animationDuration = `${duration}s`;
-            
-            const delay = Math.random() * 5;
-            particle.style.animationDelay = `${delay}s`;
-
+            particle.style.animationDelay = `${Math.random() * 5}s`;
             particlesContainer.appendChild(particle);
-            setTimeout(() => particle.remove(), (duration + delay) * 1000);
+            setTimeout(() => particle.remove(), (duration + 5) * 1000);
         }
 
         setInterval(createParticle, 800);
-        for (let i = 0; i < 8; i++) {
-            setTimeout(createParticle, i * 200);
-        }
+        for (let i = 0; i < 8; i++) { setTimeout(createParticle, i * 200); }
 
+        // ควบคุมการทำงาน
         const letterScreen = document.getElementById('letter-screen');
         const openLetterBtn = document.getElementById('open-letter');
         const videoScreen = document.getElementById('video-screen');
@@ -320,7 +310,7 @@
             }, 300);
         });
 
-        // ทำให้วิดีโอและเอฟเฟกต์หยุด/เล่นพร้อมกันอย่างแม่นยำ
+        // สั่งให้เอฟเฟกต์ทำงานพร้อมกับจังหวะที่วิดีโอจบพอดี (ended)
         introVideo.addEventListener('ended', () => {
             triggerTransitionEffect();
         });
@@ -330,40 +320,41 @@
         });
 
         function triggerTransitionEffect() {
-            // เริ่มเฟดหน้าจอวิดีโอออกพร้อมกับเอฟเฟกต์หัวใจระเบิดทันที
-            videoScreen.classList.add('fade-out');
+            // สร้างแฟลชสีขาวสว่างวาบ
+            const flash = document.createElement('div');
+            flash.className = 'fixed inset-0 bg-white z-[60] transition-opacity duration-700 pointer-events-none';
+            document.body.appendChild(flash);
 
-            const burstIcons = ['🤍', '✨', '🤍'];
-            for (let i = 0; i < 25; i++) {
+            // สร้างหัวใจพุ่งกระจายออกจากจุดกึ่งกลางหน้าจอ
+            const burstIcons = ['🤍', '✨', '🤍', '🕊️'];
+            for (let i = 0; i < 30; i++) {
                 const heart = document.createElement('div');
                 heart.innerHTML = burstIcons[Math.floor(Math.random() * burstIcons.length)];
                 heart.className = 'burst-heart z-[65]';
                 
                 const angle = Math.random() * Math.PI * 2;
-                const distance = 80 + Math.random() * 150;
-                const tx = (Math.cos(angle) * distance) + 'px';
-                const ty = (Math.sin(angle) * distance) + 'px';
-                const rot = (Math.random() * 360) + 'deg';
-                
-                heart.style.setProperty('--tx', `calc(-50% + ${tx})`);
-                heart.style.setProperty('--ty', `calc(-50% + ${ty})`);
-                heart.style.setProperty('--rot', rot);
+                const distance = 100 + Math.random() * 180;
+                heart.style.setProperty('--tx', `calc(-50% + ${Math.cos(angle) * distance}px)`);
+                heart.style.setProperty('--ty', `calc(-50% + ${Math.sin(angle) * distance}px)`);
+                heart.style.setProperty('--rot', `${Math.random() * 360}deg`);
                 heart.style.left = '50%';
                 heart.style.top = '50%';
                 
                 document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 1200);
+                setTimeout(() => heart.remove(), 1000);
             }
 
+            // สลับซ่อนหน้าวิดีโอ และแสดงหน้าการ์ดหลักทันที
+            videoScreen.classList.add('hidden');
             mainPage.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                mainPage.classList.add('show');
+            });
 
+            // เฟดแสงแฟลชขาวออกอย่างนุ่มนวล
             setTimeout(() => {
-                requestAnimationFrame(() => {
-                    mainPage.classList.add('show');
-                });
-                setTimeout(() => {
-                    videoScreen.classList.add('hidden');
-                }, 800);
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 700);
             }, 50);
         }
     </script>
