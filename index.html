@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- ปรับแต่งให้พอดีกับมือถือ และป้องกันการซูมเวลาแตะหน้าจอ -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 3 Months Anniversary 🤍</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,8 +22,7 @@
             font-family: var(--font-body);
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
             height: 100vh;
-            /* แก้ปัญหาจอบนมือถือ (Mobile URL bar) */
-            height: 100dvh; 
+            height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -36,9 +34,6 @@
             display: none !important;
         }
 
-        /* ---------------------------------
-           หน้าหลัก (เนื้อหา)
-        --------------------------------- */
         .page-content {
             opacity: 0;
             transform: translateY(30px) scale(0.96);
@@ -53,9 +48,6 @@
             transform: translateY(0) scale(1);
         }
 
-        /* ---------------------------------
-           หน้าซองจดหมาย
-        --------------------------------- */
         .letter-screen {
             position: fixed;
             inset: 0;
@@ -136,29 +128,31 @@
             animation: popPaper 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* ---------------------------------
-           หน้าจอสำหรับเล่นวิดีโออินโทร
-        --------------------------------- */
+        /* ครอบคลิปวิดีโอนกพิราบให้เต็มจอแบบไม่ออกสัดส่วน (Crop Fit) */
         .video-screen {
             position: fixed;
             inset: 0;
             z-index: 25;
             background: #ffffff;
             opacity: 1;
+            transition: opacity 0.8s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
         .video-screen video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* ครอบตัดส่วนเกินและขยายให้เต็มจออัตโนมัติ */
+            object-position: center;
         }
 
-        /* ---------------------------------
-           เอฟเฟกต์หัวใจระเบิด (Burst)
-        --------------------------------- */
+        .video-screen.fade-out {
+            opacity: 0;
+        }
+
         .burst-heart {
             position: absolute;
             font-size: 2rem;
@@ -169,19 +163,10 @@
         }
 
         @keyframes burstAnim {
-            0% { 
-                transform: translate(-50%, -50%) scale(0) rotate(0deg); 
-                opacity: 1; 
-            }
-            100% { 
-                transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); 
-                opacity: 0; 
-            }
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); opacity: 0; }
         }
 
-        /* ---------------------------------
-           Animations พื้นฐาน
-        --------------------------------- */
         @keyframes letterFloat {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -194,15 +179,11 @@
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
-        /* ---------------------------------
-           สไตล์หน้าเนื้อหาการ์ด
-        --------------------------------- */
         .elegant-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(229, 231, 235, 0.5);
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 0 20px rgba(0,0,0,0.02);
-            /* ปรับให้พอดีจอมือถือมากขึ้น */
             width: 90%;
             max-width: 380px;
             margin: 0 auto;
@@ -214,17 +195,11 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.06);
             transform: rotate(-2deg);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            /* ยืดหยุ่นตามจอมือถือ */
             width: 70vw;
             max-width: 250px;
             margin: 0 auto 30px auto;
         }
         
-        .polaroid:hover {
-            transform: rotate(1deg) scale(1.03);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-
         .polaroid-img-container {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -252,7 +227,6 @@
 </head>
 <body class="antialiased relative">
 
-    <!-- 1. หน้าจอซองจดหมาย -->
     <div id="letter-screen" class="letter-screen">
         <button id="open-letter" class="letter-button" type="button" aria-label="Open letter">
             <div class="letter-content">
@@ -262,12 +236,10 @@
         </button>
     </div>
 
-    <!-- 2. หน้าจอสำหรับเล่นวิดีโอนกพิราบ -->
     <div id="video-screen" class="video-screen hidden">
         <video id="intro-video" src="dove.mp4" playsinline muted></video>
     </div>
 
-    <!-- 3. หน้าจอหลัก (แสดงหลังเอฟเฟกต์จบ) -->
     <div id="main-page" class="page-content hidden">
         <div id="particles-container" class="absolute inset-0 z-0 overflow-hidden pointer-events-none"></div>
 
@@ -305,7 +277,6 @@
     </div>
 
     <script>
-        // ระบบตกแต่ง Particles พื้นหลัง
         const particlesContainer = document.getElementById('particles-container');
         const particleIcons = ['🤍', '✨', '☁️', '🕊️', '✧'];
 
@@ -335,52 +306,41 @@
             setTimeout(createParticle, i * 200);
         }
 
-        // ระบบควบคุมการเปลี่ยนหน้า
         const letterScreen = document.getElementById('letter-screen');
         const openLetterBtn = document.getElementById('open-letter');
         const videoScreen = document.getElementById('video-screen');
         const introVideo = document.getElementById('intro-video');
         const mainPage = document.getElementById('main-page');
 
-        // เมื่อกดปุ่มซองจดหมาย
         openLetterBtn.addEventListener('click', () => {
             letterScreen.classList.add('opened');
             setTimeout(() => {
                 videoScreen.classList.remove('hidden');
-                introVideo.play().catch(e => {
-                    // ป้องกันเผื่อเบราว์เซอร์บล็อกวิดีโอ
-                    triggerTransitionEffect();
-                });
+                introVideo.play().catch(e => triggerTransitionEffect());
             }, 300);
         });
 
-        // เมื่อวิดีโอนกพิราบเล่นจบ
+        // ทำให้วิดีโอและเอฟเฟกต์หยุด/เล่นพร้อมกันอย่างแม่นยำ
         introVideo.addEventListener('ended', () => {
             triggerTransitionEffect();
         });
 
-        // สำรองเผื่อโหลดวิดีโอไม่ขึ้น จะได้ไม่ค้างหน้าขาว
         introVideo.addEventListener('error', () => {
             triggerTransitionEffect();
         });
 
-        // ฟังก์ชันสร้างเอฟเฟกต์ตอนเปลี่ยนหน้า
         function triggerTransitionEffect() {
-            // 1. สร้างแฟลชสีขาว
-            const flash = document.createElement('div');
-            flash.className = 'fixed inset-0 bg-white z-[60] transition-opacity duration-[1000ms] pointer-events-none';
-            document.body.appendChild(flash);
+            // เริ่มเฟดหน้าจอวิดีโอออกพร้อมกับเอฟเฟกต์หัวใจระเบิดทันที
+            videoScreen.classList.add('fade-out');
 
-            // 2. สร้างหัวใจกระจาย (Heart Burst)
             const burstIcons = ['🤍', '✨', '🤍'];
             for (let i = 0; i < 25; i++) {
                 const heart = document.createElement('div');
                 heart.innerHTML = burstIcons[Math.floor(Math.random() * burstIcons.length)];
                 heart.className = 'burst-heart z-[65]';
                 
-                // สุ่มทิศทางและระยะทาง
                 const angle = Math.random() * Math.PI * 2;
-                const distance = 80 + Math.random() * 150; // ระยะการพุ่ง
+                const distance = 80 + Math.random() * 150;
                 const tx = (Math.cos(angle) * distance) + 'px';
                 const ty = (Math.sin(angle) * distance) + 'px';
                 const rot = (Math.random() * 360) + 'deg';
@@ -395,17 +355,15 @@
                 setTimeout(() => heart.remove(), 1200);
             }
 
-            // 3. ปิดหน้าจอวิดีโอและแสดงหน้าหลัก
-            videoScreen.classList.add('hidden');
             mainPage.classList.remove('hidden');
 
             setTimeout(() => {
                 requestAnimationFrame(() => {
                     mainPage.classList.add('show');
                 });
-                // เฟดแฟลชสีขาวออก
-                flash.style.opacity = '0';
-                setTimeout(() => flash.remove(), 1000);
+                setTimeout(() => {
+                    videoScreen.classList.add('hidden');
+                }, 800);
             }, 50);
         }
     </script>
